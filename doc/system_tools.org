@@ -1,0 +1,17 @@
+#+TITLE: GN2 system tool deployment
+
+* Table of Contents                                                     :TOC:
+ - [[#introduction][Introduction]]
+ - [[#ssh][ssh]]
+
+* Introduction
+
+The webservers are named Penguin and Penguin2. On these servers GNU
+Guix is running to manage software installation and GN2 deployment in
+a controlled fashion. Generally the tools are installed under
+
+: export PATH="/usr/local/guix-profiles/shared-profile/bin:/usr/local/guix-profiles/shared-profile/sbin":$PATH
+
+* ssh
+
+ssh is installed by GNU Guix in /usr/local/guix-profiles/shared-profile/bin.

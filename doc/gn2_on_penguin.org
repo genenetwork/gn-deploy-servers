@@ -1,0 +1,61 @@
+#+TITLE: GN2 on Penguin
+
+* Table of Contents                                                     :TOC:
+ - [[#introduction][Introduction]]
+ - [[#running-gn2][Running GN2]]
+   - [[#gnu-guix-profiles][GNU Guix profiles]]
+
+* Introduction
+
+The webservers are named Penguin and Penguin2. On these servers GNU
+Guix is running to manage software installation and GN2 deployment in
+a controlled fashion.
+
+* Running GN2
+
+** GNU Guix profiles
+
+*** System-wide shared profile
+
+With GNU Guix we install so-called shared profiles in
+
+: ls /usr/local/guix-profiles/shared-profile/
+
+this profile contains some common tools, such as vim. Normally
+you can add
+
+: export PATH=/usr/local/guix-profiles/shared-profile/bin:$PATH
+
+Other tools can be added on request. To see the guix package list run
+
+: guix package -A
+
+(after setting the path).
+
+Current list of standard tools installed in shared-profile:
+
+#+begin_src sh
+guix package -p /usr/local/guix-profiles/shared-profile -i \
+             guix vim openssh mc ruby pfff git lz4 strace curl \
+             mutt
+#+end_src
+
+note that these tools tend to be more up to date than the ones on the
+base distribution (/usr/bin:/bin:/usr/local/bin etc.). You can still
+use the old tools by using those paths.
+
+*** Personal profile
+
+You can install packages in your own profile with, for example
+
+: guix package -i vim
+
+which installs in ~/.guix-profile/bin - which you should also
+add to your path, e.g.
+
+: export PATH=$HOME/.guix-profile/bin:$PATH
+
+*** GN2 deployment profiles
+
+So, there is a local profile and a system-wide shared one we use.  In
+addition we have a versioned profile for every GN2 deployment.

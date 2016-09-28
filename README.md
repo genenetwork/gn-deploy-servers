@@ -13,6 +13,10 @@ Installation of GN2 is documented in the genenetwork2
 For deployment of GN2 on the webservers (penguin and penguin2), see
 [penguins](./doc/gn2_on_penguin.org).
 
+For deployment of system tools on the webservers (penguin and penguin2), see
+[penguins](./doc/system_tools.org).
+
+
 ## Access
 
 All machines are inside the UT network and can only be reached through
