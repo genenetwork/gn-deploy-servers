@@ -3,7 +3,10 @@
 * Table of Contents                                                     :TOC:
  - [[#introduction][Introduction]]
  - [[#running-gn2][Running GN2]]
+   - [[#quick-overview][Quick overview]]
    - [[#gnu-guix-profiles][GNU Guix profiles]]
+   - [[#configuring-gn2][Configuring GN2]]
+   - [[#troubleshooting][Troubleshooting]]
 
 * Introduction
 
@@ -12,6 +15,33 @@ Guix is running to manage software installation and GN2 deployment in
 a controlled fashion.
 
 * Running GN2
+
+** Quick overview
+
+Add the shared profile to your path (you can do that in ~/.bashrc)
+
+: export PATH=/usr/local/guix-profiles/shared-profile/bin:$PATH
+
+Point the GN2_PROFILE to the profile you want to use
+
+: export GN2_PROFILE=/usr/local/guix-profiles/gn2-staging
+
+Run the webserver with a JSON file overriding default settings (listed
+in ./etc/default_settings.py) with
+
+: ./bin/genenetwork2 ~/my_settings.json
+
+Where my_setting.json contains overrides, such as
+
+#+begin_src javascript
+{
+     "USE_GN_SERVER" :     true,
+     "LOGFILE" :           "HOME+'/tmp/gn2'",
+     "GENENETWORK_FILES" : "HOME+'/gn2_data'"
+}
+#+end_src
+
+See below for examples.
 
 ** GNU Guix profiles
 
@@ -32,12 +62,10 @@ Other tools can be added on request. To see the guix package list run
 
 (after setting the path).
 
-Current list of standard tools installed in shared-profile:
+Current list of standard tools installed in shared-profile, see
 
 #+begin_src sh
-guix package -p /usr/local/guix-profiles/shared-profile -i \
-             guix vim openssh mc ruby pfff git lz4 strace curl \
-             mutt
+ls /usr/local/guix-profiles/shared-profile/bin
 #+end_src
 
 note that these tools tend to be more up to date than the ones on the
@@ -59,3 +87,110 @@ add to your path, e.g.
 
 So, there is a local profile and a system-wide shared one we use.  In
 addition we have a versioned profile for every GN2 deployment.
+
+The main staging GN2 is installed with a command that includes the profile
+path:
+
+#+begin_src sh
+env GUIX_PACKAGE_PATH=../guix-bioinformatics/ ./pre-inst-env guix package -p /usr/local/guix-profiles/gn2-staging -i genenetwork2
+#+end_src sh
+
+i.e., we can now have one single gn2-staging and one gn2-production
+profile. But we can also have versioned profiles named gn2-2.0-a8fcff4
+(which was the one published in JOSS).
+
+To use these profiles, simply use the output of guix with the profile, e.g.,
+for staging:
+
+: guix package -p /usr/local/guix-profiles/gn2-staging --search-paths
+
+which on my system look like
+
+#+begin_src sh
+export PATH="/usr/local/guix-profiles/gn2-staging/bin:/usr/local/guix-profiles/gn2-staging/sbin:/usr/bin:/bin":/usr/bin:/bin
+export PYTHONPATH="/usr/local/guix-profiles/gn2-staging/lib/python2.7/site-packages"
+export R_LIBS_SITE="/usr/local/guix-profiles/gn2-staging/site-library/"
+#+end_src sh
+
+These settings should be *set* in your shell so all Python and R
+modules are found. This can be achieved with
+
+: source /usr/local/guix-profiles/gn2-staging/etc/profile
+
+Which sets the variables in place.
+
+Then run
+
+: ./bin/genenetwork2 ~/my_settings.json
+
+as usual. Note you should have /usr/bin:/bin to your path to still
+have the basic Unix tools (they are set with the above source
+command).
+
+** Configuring GN2
+
+When running GN2, we first choose a profile and set, for example
+
+: export GN2_PROFILE=/usr/local/guix-profiles/gn2-staging
+
+GN2 has a number of settings that can be configured. The current defaults
+can be found in ./etc/default_settings.py.
+
+In the 2.0 version of GN2 we passed in a Python settings file that
+would replace all the defaults. With GN2 2.10 we changed this to
+*overrides* in a JSON file (or using shell parameters). So, now the
+settings are done in, for example
+
+#+begin_src javascript
+{
+  GENENETWORK_FILES : "/home/staging/gn2_files"
+}
+#+end_src
+
+Run this with
+
+: ./bin/genenetwork2 /home/staging/gn2_settings.json
+
+Now all other settings, such as PYLMM_COMMAND, keep default profile
+values, while only GENENETWORK_FILES is overridden.  This is less
+error prone than the 2.0 setup (no more checking).
+
+Note that settings can also be changed through shell variables. This
+is particularly useful for debugging. We could have done:
+
+: export GENENETWORK_FILES=/home/staging/gn2_files
+: ./bin/genenetwork2
+
+One especially useful override is
+
+: env LOG_LEVEL=DEBUG ./bin/genenetwork2 ~/my_settings.json
+
+which increases server output for development purposes.
+
+*** JSON expample
+
+One example is my default development setting:
+
+#+begin_src javascript
+{
+     "USE_GN_SERVER" :     true,
+     "LOGFILE" :           "HOME+'/tmp/gn2'",
+     "GENENETWORK_FILES" : "HOME+'/gn2_data'"
+}
+#+end_src
+
+Note that strings are evaluated as *Python* strings, so
+GENENETWORK_FILES expands to the full path.
+
+** Troubleshooting
+
+You may see
+
+: sh: warning: setlocale: LC_ALL: cannot change locale (en_US.utf8)
+
+or
+
+: rpy2.rinterface.initr()
+: /home/wrk/opt/gn2-staging/lib/python2.7/site-packages/rpy2-2.7.6-py2.7-linux-x86_64.egg/rpy2/robjects/robject.py:6: UserWarning: 3: Setting LC_TIME failed, using "C"
+
+messages. At the moment we can ignore these.

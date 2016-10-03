@@ -2,6 +2,7 @@
 
 * Table of Contents                                                     :TOC:
  - [[#introduction][Introduction]]
+ - [[#installation][Installation]]
  - [[#ssh][ssh]]
 
 * Introduction
@@ -11,6 +12,16 @@ Guix is running to manage software installation and GN2 deployment in
 a controlled fashion. Generally the tools are installed under
 
 : export PATH="/usr/local/guix-profiles/shared-profile/bin:/usr/local/guix-profiles/shared-profile/sbin":$PATH
+
+* Installation
+
+Currently tools are installed in the shared profile with the command:
+
+#+begin_src sh
+penguin2:~/genenetwork/gn-latest-guix$ ./pre-inst-env guix package \
+  -p /usr/local/guix-profiles/shared-profile -i guix vim openssh mc ruby \
+  pfff git lz4 strace curl mutt gdb valgrind --fallback
+#+end_src sh
 
 * ssh
 
