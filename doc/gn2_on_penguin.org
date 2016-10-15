@@ -193,4 +193,22 @@ or
 : rpy2.rinterface.initr()
 : /home/wrk/opt/gn2-staging/lib/python2.7/site-packages/rpy2-2.7.6-py2.7-linux-x86_64.egg/rpy2/robjects/robject.py:6: UserWarning: 3: Setting LC_TIME failed, using "C"
 
-messages. At the moment we can ignore these.
+messages. At the moment we can ignore these. Easiest to avoid these
+messages is to set the locale to C with
+
+: export LC_ALL=C
+
+*** LookupError: 'show' not found
+
+:   File "/usr/local/guix-profiles/gn2-2.0/lib/python2.7/site-packages/rpy2-2.7.6-py2.7-linux-x86_64.egg/rpy2/robjects/robject.py", line 64, in RObjectMixin
+:    __show = rpy2.rinterface.baseenv.get("show")
+: LookupError: 'show' not found
+
+Occurs when Rpy2 is linked against a different version of R than the
+one running. Running 'which R' should show the R running in the
+profile - not any other R. E.g.
+
+: echo $GN2_PROFILE
+:   /usr/local/guix-profiles/gn2-staging
+: which R
+:   /usr/local/guix-profiles/gn2-staging/bin/R
