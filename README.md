@@ -1,6 +1,6 @@
 # GeneNetwork2 deployment (in Memphis)
 
-This (private) repository contains the configuration files, scripts
+This repository contains the configuration files, scripts
 and documentation for deployment of GN2.
 
 ## Introduction
@@ -16,6 +16,11 @@ For deployment of GN2 on the webservers (penguin and penguin2), see
 For deployment of system tools on the webservers (penguin and penguin2), see
 [penguins](./doc/system_tools.org).
 
+## Configuration
+
+We currently use the 'deploy' tool. Run it with something like
+
+    /home/pjotr/izip/git/opensource/ruby/deploy/bin/deploy  /home/pjotr/izip/git/deploy/gn-deploy-servers/
 
 ## Access
 

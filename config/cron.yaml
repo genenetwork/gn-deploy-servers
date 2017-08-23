@@ -1,0 +1,5 @@
+---
+- copy-file:
+    root:
+      dest: /var/spool/cron/crontabs/root
+      mode: "500"

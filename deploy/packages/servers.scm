@@ -61,17 +61,17 @@
   (let ((commit "dd9c7fb2a9d5fa40b4054e1bcb7c57905d98d5f8"))
     (package
     (name "gn2-penguin2")
-        (source (origin
-             (method git-fetch)
-             (uri (git-reference
-                   ;; (url "https://github.com/genenetwork/genenetwork2.git")
-                   (url "https://github.com/pjotrp/QTLreaper.git")
-                   (commit commit)))
-             (sha256
-              (base32
-               "1ldcvyk8y8w6f4ci04hzx85sknd5a3h424p5bfi4fz32sm2p7fja"))))
+    (version (string-append "1.0-" (string-take commit 7) ))
+    (source (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/genenetwork/gn-deploy-servers.git")
+               (commit commit)))
+         (file-name (string-append name "-" version))
+         (sha256
+          (base32
+           "1ldcvyk8y8w6f4ci04hzx85sknd5a3h424p5bfi4fz32sm2p7fja"))))
 
-    (version "1.0")
     (build-system trivial-build-system)
     (native-inputs `(("lz4" ,lz4)
                      ("tar" ,tar)
