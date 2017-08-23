@@ -1,0 +1,9 @@
+---
+- copy-file:
+    nginx.service:
+      dest: /lib/systemd/system/nginx.service
+      mode: "444"
+- dir:
+    /etc/nginx:
+       recursive: true
+

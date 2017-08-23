@@ -15,14 +15,27 @@ a controlled fashion. Generally the tools are installed under
 
 * Installation
 
-Currently tools are installed in the shared profile with the command:
+Currently tools are installed in the shared profile with the command (as root):
 
 #+begin_src sh
+mkdir -p /usr/local/guix-profiles
 penguin2:~/genenetwork/gn-latest-guix$ ./pre-inst-env guix package \
-  -p /usr/local/guix-profiles/shared-profile -i guix vim openssh mc ruby \
-  pfff git lz4 strace curl mutt gdb valgrind --fallback
+  -p /usr/local/guix-profiles/shared-profile \
+  -i vim openssh mc ruby guix tree \
+  pfff git lz4 strace curl mutt gdb valgrind nginx python
+#+end_src sh
+
+* Paths
+
+To use the tools, typically set
+
+#+begin_src sh
+export PATH="/usr/local/guix-profiles/shared-profile/bin:/usr/local/guix-profiles/shared-profile/sbin${PATH:+:}$PATH"
+export GEM_PATH="/usr/local/guix-profiles/shared-profile/lib/ruby/gems/2.4.0${GEM_PATH:+:}$GEM_PATH"
+export GIT_EXEC_PATH="/usr/local/guix-profiles/shared-profile/libexec/git-core"
+export PYTHONPATH="/usr/local/guix-profiles/shared-profile/lib/python3.5/site-packages${PYTHONPATH:+:}$PYTHONPATH"
 #+end_src sh
 
 * ssh
 
-ssh is installed by GNU Guix in /usr/local/guix-profiles/shared-profile/bin.
+ssh is therefore installed by GNU Guix in /usr/local/guix-profiles/shared-profile/bin.
