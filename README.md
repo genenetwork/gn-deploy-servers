@@ -21,9 +21,8 @@ For deployment of system tools on the webservers (penguin and penguin2), see
 We currently use the 'deploy' tool. Run it with something like
 
     /home/pjotr/izip/git/opensource/ruby/deploy/bin/deploy  /home/pjotr/izip/git/deploy/gn-deploy-servers/
-
-    systemctl daemon-reload
-    systemctl restart nginx
+    systemctl daemon-reload 
+    systemctl enable nginx
 
 ## Access
 
