@@ -1,0 +1,5 @@
+---
+- copy-file:
+    ipfs.service:
+      dest: /lib/systemd/system/ipfs.service
+      mode: "444"
