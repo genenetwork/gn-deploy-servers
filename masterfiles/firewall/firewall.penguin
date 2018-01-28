@@ -1,0 +1,71 @@
+#! /bin/sh
+#
+# Cfruby generic firewalling
+
+set -e
+
+# /etc/init.d/firewall: start and stop the firewall
+
+export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+
+case "$1" in
+  start)
+    echo "Starting firewall..."
+    # ---- Allow incoming ssh
+    # /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport ssh -m recent --name ssh --set
+    # /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport ssh -m recent --name ssh --rcheck --seconds 127 --hitcount 10 -j DROP
+    # /sbin/iptables -A INPUT -i eth1 -p tcp --dport ssh -j ACCEPT 
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport ssh -m recent --name ssh --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport ssh -m recent --name ssh --rcheck --seconds 127 --hitcount 10 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport ssh -j ACCEPT 
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 21 -m recent --name ssh2 --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 21 -m recent --name ssh2 --rcheck --seconds 127 --hitcount 10 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 21 -j ACCEPT 
+    # ---- Allow stunnel
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 442 -m recent --name https --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 442 -m recent --name https --rcheck --seconds 127 --hitcount 10 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 443 -m recent --name https --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 443 -m recent --name https --rcheck --seconds 127 --hitcount 10 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 444 -m recent --name https --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 444 -m recent --name https --rcheck --seconds 127 --hitcount 10 -j DROP
+    # ---- Allow mosh
+    iptables -A INPUT -p udp -m multiport --dports 60000:60010 -j ACCEPT
+
+    # ---- Allow mail 
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 25 -m recent --name smtp --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 25 -m recent --name smtp --rcheck --seconds 127 --hitcount 10 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 25 -j ACCEPT 
+    # ---- Allow webserver
+    # Adjust "--connlimit-above NN" to limit the maximum connections per IP and rate limit (20conn/10s)
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 80 -m recent --name http --set
+    /sbin/iptables -A INPUT -i eth1 -p tcp --syn --dport 80 -m recent --name http --rcheck --seconds 10 --hitcount 20 -j DROP
+    /sbin/iptables -t filter -I INPUT -p tcp --dport 80 -m state --state RELATED,ESTABLISHED -j ACCEPT
+    /sbin/iptables -t filter -I INPUT -p tcp --syn --dport 80 -m connlimit --connlimit-above 10 --connlimit-mask 32 -j DROP
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 80 -j ACCEPT 
+
+    # ---- Allow stunnels
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 442 -j ACCEPT 
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 443 -j ACCEPT 
+    /sbin/iptables -A INPUT -i eth1 -p tcp --dport 444 -j ACCEPT 
+    # 445 does not work!
+    # ---- Drop all other
+    /sbin/iptables -A INPUT -i eth1 -m state --state NEW,INVALID -j DROP
+    
+  ;;
+  stop)
+        echo "Stopping firewall..."
+        iptables -F; iptables -t nat -F; iptables -t mangle -F
+  ;;
+
+  restart)
+        $0 stop ; $0 start 
+  echo "."
+  ;;
+
+  *)
+  echo "Usage: /etc/init.d/firewall {start|stop|restart}"
+  exit 1
+esac
+
+exit 0
+
