@@ -1,6 +1,6 @@
 # GeneNetwork2 deployment (in Memphis)
 
-This repository contains the configuration files, scripts
+This *public repository* contains the configuration files, scripts
 and documentation for deployment of GN2.
 
 ## Introduction
