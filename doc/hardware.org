@@ -1,0 +1,10 @@
+* Hardware
+
+* URLs
+
+   These URLs are available now:
+
+   gn2-staging.genenetwork.org (P1 in use)
+   gn2-testing.genenetwork.org
+   gn2-pjotr2.genenetwork.org (P1)
+   gn2-fallback.genenetwork.org (P2)
