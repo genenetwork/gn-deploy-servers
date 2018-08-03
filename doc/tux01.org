@@ -1,0 +1,21 @@
+* Tux01
+
+Tux01 is the big box we run all webservices on.
+
+** Network
+
+eno2d1 is the main network interface into the base system. eno3 handles the VMs.
+
+#+BEGIN_SOURCE
+pjotr@tux01:~$ ip a
+2: eno1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 00:0a:f7:e3:f5:4a brd ff:ff:ff:ff:ff:ff
+3: eno2d1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0a:f7:e3:f5:4b brd ff:ff:ff:ff:ff:ff
+    inet 172.23.19.70/21 brd 172.23.23.255 scope global eno2d1
+4: eno3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:0a:f7:e3:f5:48 brd ff:ff:ff:ff:ff:ff
+    inet 172.23.19.18/21 brd 172.23.23.255 scope global eno3
+5: eno4: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 00:0a:f7:e3:f5:49 brd ff:ff:ff:ff:ff:ff
+#+END_SRC
