@@ -1,0 +1,37 @@
+
+For remote access sometimes firewalls are iffy. A proxy can be set with something like this
+
+#+BEGIN_SRC
+upstream gn1_proxy {
+  server 128.169.4.43:80;  # this is new server, by IP address
+  keepalive 200;
+}
+
+upstream gn2_proxy {
+  server 128.169.5.59:80;  # this is new server, by IP address
+  keepalive 200;
+}
+
+
+server {
+  listen 80;
+  server_name gn1-proxy.genenetwork.org;
+  location / {
+    proxy_set_header Host $host;
+    proxy_pass http://gn1_proxy;
+    proxy_http_version 1.1;
+    proxy_read_timeout 60m;
+  }
+}
+
+server {
+  listen 80;
+  server_name gn2-proxy.genenetwork.org;
+  location / {
+    proxy_set_header Host $host;
+    proxy_pass http://gn2_proxy;
+    proxy_http_version 1.1;
+    proxy_read_timeout 60m;
+   }
+}
+#+END_SRC
