@@ -18,6 +18,6 @@ date
 
 # test: su mysql -c "$borg create $borgdir::TUX01_Mariadb-$stamp $backupdir --progress"
 
-borgdir=/export/backup/borg/borg-tux01-etc
+borgdir=/export/backup/borg/snapshots/tux01-etc
 tag="BORG-TUX01-ETC"
-sheepdog_run.rb --always -v --tag $tag -c "$borg create --stats $borgdir::TUX01_Mariadb-$stamp /etc"
+sheepdog_run.rb --always -v --tag $tag -c "$borg create --stats $borgdir::TUX01_etc-$stamp /etc"
