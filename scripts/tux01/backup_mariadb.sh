@@ -10,7 +10,7 @@ fi
 source $(dirname "$0")/sheepdog_env.sh
 
 backupdir=/home/backup/tux01_mariadb_new
-# rm -rf $backupdir/latest
+rm -rf $backupdir/latest
 tag="MARIABACKUP_TUX01"
 sheepdog_run.rb -h rabbit --always -v --tag $tag -c "mariabackup --backup --target-dir=$backupdir/latest/ --user=webqtlout --password=webqtlout"
 tag="MARIABACKUP_PREPARE_TUX01"
@@ -18,3 +18,8 @@ sheepdog_run.rb -h rabbit --always -v --tag $tag -c "mariabackup --prepare --tar
 borgdir=/export2/backup/borg/borg-tux01
 tag="BORG-TUX01-MARIADB"
 sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir $backupdir --args '--stats'
+
+# Give access to ibackup user
+sheepdog_run.rb -h rabbit -c "find $borgdir -type d -exec chmod g+rx \"{}\" \;"
+sheepdog_run.rb -h rabbit -c "find $borgdir -exec chmod g+r \"{}\" \;"
+
