@@ -10,10 +10,6 @@ source $(dirname "$0")/sheepdog_env.sh
 # echo "Backup /export/ipfs BORG-P2-IPFS"
 sheepdog_borg.rb --tag BORG-P2-IPFS -b /export/backup/borg/borg-ipfs /export/ipfs --always $*
 
-# echo "Backup gitea BORG-P2-GITEA"
-# sheepdog_run.rb -c "$borg create  --stats /export/backup/borg-gitea::P2_gitea-$stamp /export/git/gitea" --tag 'BORG-P2-GITEA' --log --always --host epysode.borm.org 
-# sheepdog_borg.rb --tag BORG-P2-GITEA -b /export/backup/borg/borg-gitea /export/git/gitea --always $*
-
 # echo "Backup tux01 mariabd, redis etc. BORG-P2-TUX01"
 # sheepdog_run.rb -c "$borg create  --stats /export/backup/borg-tux01::P2_tux01-$stamp /export/backup/tux01-*" --tag 'BORG-P2-TUX01' --log --always --host epysode.borm.org 
 
