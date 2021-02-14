@@ -1,0 +1,11 @@
+# First Monday of the month
+0 3 * * mon [ $(date +%d) -le 07 ] && /export/backup/scripts/epysode_validate.sh --verify-data
+# Every Sunday
+0 3 * * 0 /export/backup/scripts/epysode/epysode_validate.sh
+# Every day
+0 10 * * * /export/backup/scripts/epysode/epysode_expect.sh
+# 4x per day
+30 0,6,12,18 * * * /export/backup/scripts/epysode/epysode.sh
+# Every 15 minutes
+9,24,39,54 * * * * /export/backup/scripts/epysode/monitor_websites.sh 
+
