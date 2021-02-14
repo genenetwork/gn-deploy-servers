@@ -29,6 +29,12 @@ FIND=Rat
 echo $TAG
 sheepdog_run.rb -c "curl $URL|grep $FIND" --tag $TAG $*
 
+TAG=WEB_BNW
+URL="http://bnw.genenetwork.org/sourcecodes/home.php"
+FIND=BNW
+echo $TAG
+sheepdog_run.rb -c "curl $URL|grep $FIND" --tag $TAG $*
+
 
 TAG=WEB_RATS_PUB
 URL="--connect-timeout 30 --retry 3 --retry-delay 5 http://rats.pub/"
