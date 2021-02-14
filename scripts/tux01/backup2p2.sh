@@ -18,7 +18,10 @@ sheepdog_run.rb -h rabbit -c 'rsync -va /home/gn2/production/ --exclude tmp/ --r
 # sheepdog_run.rb -h rabbit -c 'rsync -va /var/lib/mysql/* --rsync-path=/usr/bin/rsync -e "ssh -i /home/mariadb/.ssh/id_backup" wrk@penguin2.genenetwork.org:/export/backup/tux01-mariadb/' --always -v --tag $tag
 
 borgdir=/export2/backup/borg/borg-tux01
-
 tag=RSYNC_TUX01_P2_BORG_MARIADB
 sheepdog_run.rb -h rabbit -c "rsync -va $borgdir --rsync-path=/usr/bin/rsync -e \"ssh -i /home/ibackup/.ssh/id_backup\" wrk@penguin2.genenetwork.org:/export/backup/tux01/" --always -v --tag $tag
+
+borgdir=/export2/backup/borg/borg-genenetwork
+tag=RSYNC_TUX01_P2_BORG_GENENETWORK
+sheepdog_run.rb -c "rsync -va $borgdir --rsync-path=/usr/bin/rsync -e \"ssh -i /home/ibackup/.ssh/id_backup\" wrk@penguin2.genenetwork.org:/export/backup/tux01/" --always -v --tag $tag
 

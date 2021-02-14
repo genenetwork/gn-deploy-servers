@@ -11,17 +11,17 @@ source $(dirname "$0")/sheepdog_env.sh
 borgdir=/export/backup/borg/borg-genenetwork
 
 tag=TUX01_BORG_GN2_HOME
-sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args '--exclude */tmp' /export/local/home/gn2/production
+sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args "--exclude '*/tmp'" /export/local/home/gn2/production
 
 tag=TUX01_BORG_GN1_HOME
-sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args '--exclude */tmp' /home/gn1/production
+sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args "--exclude '*/tmp'" /home/gn1/production
 
 tag=TUX01_BORG_GN3_HOME
-sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args '--exclude */tmp' /home/gn3/production
+sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args "--exclude '*/tmp'" /home/gn3/production
 
 tag=TUX01_BORG_GN2s_HOME
-sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args '--exclude */tmp --stats' /home/gn2-staging/staging
+sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args "--exclude '*/tmp'" /home/gn2-staging/staging
 
 tag=TUX01_BORG_ZACH_HOME
-sheepdog_borg.rb -h rabbit --always -v --tag $tag -b $borgdir --args '--exclude */tmp --stats' /home/zas1024/*
+sheepdog_borg.rb --always -v --tag $tag -b $borgdir --args "--exclude '*/tmp'" /home/zas1024/*
 
